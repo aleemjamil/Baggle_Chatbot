@@ -13,7 +13,6 @@ from dotenv import load_dotenv
 import pdb
 load_dotenv()
 
-# OPENAI_API_KEY = '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'
 OPENAI_API_KEY=os.environ["OPENAI_API_KEY"]
 
 conversations_dir = os.getcwd()+"/conversations"

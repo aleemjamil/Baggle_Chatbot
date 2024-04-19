@@ -8,6 +8,7 @@ import pdb
 conversations_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "conversations/")
 os.makedirs(conversations_dir, exist_ok=True)
 
+# delete the all conversation
 def delete_conversation_file(token_id):
     conversation_file_path = os.path.join(conversations_dir, f"{token_id}_conversation.json")
     if os.path.exists(conversation_file_path):
@@ -19,6 +20,7 @@ app = Flask(__name__)
 
 baggle_bot = Baggle_Bot()
 
+# Route for baggle  bot's functionality
 @app.route('/baggle_chatbot', methods=['POST'])
 def ask_question():
     data = request.get_json()
@@ -34,5 +36,6 @@ def ask_question():
     
     return jsonify({'response': new_response})
 
+# Running the Flask app
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port="4848")

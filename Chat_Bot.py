@@ -21,6 +21,7 @@ conversations_dir = os.getcwd()+"/conversations"
 # os.path.join(os.path.dirname(os.path.abspath(__file__)), "conversations/")
 os.makedirs(conversations_dir, exist_ok=True)
 
+# load the prvious conversation against requested user
 def load_conversation(token_id):
     conversation_file_path = os.path.join(conversations_dir, f"{token_id}_conversation.json")
     if os.path.exists(conversation_file_path):
@@ -31,6 +32,7 @@ def load_conversation(token_id):
             return []
     return []
 
+# save conversation when user ask question 
 def save_conversation(token_id, conversation):
     conversation_file_path = os.path.join(conversations_dir, f"{token_id}_conversation.json")
     with open(conversation_file_path, "w") as conversation_file:
@@ -108,19 +110,15 @@ class Baggle_Bot:
 #             verbose=True,
             prompt= self.prompt_template
         )
-#         print(self.question("hi how are you"))
         
         
     def question(self,token, user_input):
-        docs = self.db.similarity_search(user_input)
-#         print(docs)
-       
+        docs = self.db.similarity_search(user_input)       
         conversation = load_conversation(token)
 
         response = self.chain({"input_documents": docs, "human_input": user_input, "chat_history": conversation})
         self.output_text = response['output_text']
         self.history = response['chat_history']
-#         conversation = []
         for text in self.history[-2:]:
             if text.type == "ai":
                 conversation.append({"AIMessage":text.content})

@@ -26,9 +26,9 @@ def ask_question():
     data = request.get_json()
    
     if 'user_input' not in data:
-        return jsonify({'msg':"Please Provide question!"})
+        return jsonify({'msg':"Please Provide question!"}),400
     if 'conversation_list' not in data:
-        return jsonify({'msg':"Please Provide conversatoin list!"})
+        return jsonify({'msg':"Please Provide conversatoin list!"}),400
     
     user_input = data.get('user_input')
     conversation = data.get("conversation_list")

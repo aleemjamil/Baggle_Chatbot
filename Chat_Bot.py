@@ -16,27 +16,27 @@ load_dotenv()
 
 OPENAI_API_KEY = os.environ["OPENAI_API_KEY"] 
 
-conversations_dir = os.getcwd()+"/conversations"
+# conversations_dir = os.getcwd()+"/conversations"
 
-# os.path.join(os.path.dirname(os.path.abspath(__file__)), "conversations/")
-os.makedirs(conversations_dir, exist_ok=True)
+# # os.path.join(os.path.dirname(os.path.abspath(__file__)), "conversations/")
+# os.makedirs(conversations_dir, exist_ok=True)
 
-# load the prvious conversation against requested user
-def load_conversation(token_id):
-    conversation_file_path = os.path.join(conversations_dir, f"{token_id}_conversation.json")
-    if os.path.exists(conversation_file_path):
-        if os.path.getsize(conversation_file_path) > 0:  # Check if the file is not empty
-            with open(conversation_file_path, "r") as conversation_file:
-                return json.load(conversation_file)
-        else:
-            return []
-    return []
+# # load the prvious conversation against requested user
+# def load_conversation(token_id):
+#     conversation_file_path = os.path.join(conversations_dir, f"{token_id}_conversation.json")
+#     if os.path.exists(conversation_file_path):
+#         if os.path.getsize(conversation_file_path) > 0:  # Check if the file is not empty
+#             with open(conversation_file_path, "r") as conversation_file:
+#                 return json.load(conversation_file)
+#         else:
+#             return []
+#     return []
 
-# save conversation when user ask question 
-def save_conversation(token_id, conversation):
-    conversation_file_path = os.path.join(conversations_dir, f"{token_id}_conversation.json")
-    with open(conversation_file_path, "w") as conversation_file:
-        json.dump(conversation, conversation_file, indent=2)
+# # save conversation when user ask question 
+# def save_conversation(token_id, conversation):
+#     conversation_file_path = os.path.join(conversations_dir, f"{token_id}_conversation.json")
+#     with open(conversation_file_path, "w") as conversation_file:
+#         json.dump(conversation, conversation_file, indent=2)
 
 
 
@@ -112,17 +112,17 @@ class Baggle_Bot:
         )
         
         
-    def question(self,token, user_input):
+    def question(self,conversation, user_input):
         docs = self.db.similarity_search(user_input)       
-        conversation = load_conversation(token)
+        # conversation = load_conversation(conversation)
 
         response = self.chain({"input_documents": docs, "human_input": user_input, "chat_history": conversation})
         self.output_text = response['output_text']
         self.history = response['chat_history']
-        for text in self.history[-2:]:
-            if text.type == "ai":
-                conversation.append({"AIMessage":text.content})
-            else:
-                conversation.append({"HumanMessage":text.content})
-        save_conversation(token, conversation)
+        # for text in self.history[-2:]:
+        #     if text.type == "ai":
+        #         conversation.append({"AIMessage":text.content})
+        #     else:
+        #         conversation.append({"HumanMessage":text.content})
+        # save_conversation(token, conversation)
         return response['output_text']

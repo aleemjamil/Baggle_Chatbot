@@ -5,14 +5,14 @@ from collections import deque
 import json
 import pdb
 
-conversations_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "conversations/")
-os.makedirs(conversations_dir, exist_ok=True)
+# conversations_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "conversations/")
+# os.makedirs(conversations_dir, exist_ok=True)
 
-# delete the all conversation
-def delete_conversation_file(token_id):
-    conversation_file_path = os.path.join(conversations_dir, f"{token_id}_conversation.json")
-    if os.path.exists(conversation_file_path):
-        os.remove(conversation_file_path)
+# # delete the all conversation
+# def delete_conversation_file(token_id):
+#     conversation_file_path = os.path.join(conversations_dir, f"{token_id}_conversation.json")
+#     if os.path.exists(conversation_file_path):
+#         os.remove(conversation_file_path)
 
 
 
@@ -24,18 +24,24 @@ baggle_bot = Baggle_Bot()
 @app.route('/baggle_chatbot', methods=['POST'])
 def ask_question():
     data = request.get_json()
+   
+    if 'user_input' not in data:
+        return jsonify({'msg':"Please Provide question!"})
+    if 'conversation_list' not in data:
+        return jsonify({'msg':"Please Provide conversatoin list!"})
+    
     user_input = data.get('user_input')
-    token = data.get("token")
-    if user_input == "end_convo":
-        delete_conversation_file(token)
-        return jsonify({'response': 'Thank you'})
+    conversation = data.get("conversation_list")
+    if not conversation:
+        conversation =[]
+    
 
-    response = baggle_bot.question(token, user_input)
+    response = baggle_bot.question(conversation, user_input)
     
     new_response=response.replace("A:","").replace("RESPONSE:","").replace("ANSWER:","").strip()
     
-    return jsonify({'response': new_response})
+    return jsonify({'response': new_response}),200
 
 # Running the Flask app
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port="4848")
+    app.run(host='0.0.0.0', port="8000" ,debug=True)

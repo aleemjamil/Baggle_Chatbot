@@ -128,7 +128,6 @@ For any issues or inquiries, please contact the team at [support@baggle.com](mai
 ---
 
 **Baggle Chatbot** is a project created by the Baggle team. Thank you for using our chatbot to enhance your online shopping experience!
-```
 
 ### Key Changes:
 - Updated the **Backend** section to reflect the use of **Flask** for the server-side logic.
